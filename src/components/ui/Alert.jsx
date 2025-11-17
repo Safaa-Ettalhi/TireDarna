@@ -5,10 +5,18 @@ export function Alert({ variant = "info", title, message }) {
     error: "border-red-200 bg-red-50 text-red-700",
   };
 
+  const isString = typeof message === "string";
+
   return (
     <div className={`rounded-xl border px-4 py-3 text-sm ${styles[variant]}`}>
       {title && <p className="font-semibold">{title}</p>}
-      {message && <p className="mt-1 leading-relaxed">{message}</p>}
+      {message && (
+        isString ? (
+          <p className="mt-1 leading-relaxed">{message}</p>
+        ) : (
+          <div className="mt-1 leading-relaxed">{message}</div>
+        )
+      )}
     </div>
   );
 }

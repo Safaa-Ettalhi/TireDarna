@@ -18,7 +18,13 @@ export async function apiFetch(path, options = {}) {
 
   if (!response.ok) {
     const message = data?.message || response.statusText;
-    throw new Error(message);
+    const error = new Error(message);
+    error.response = {
+      status: response.status,
+      statusText: response.statusText,
+      data: data,
+    };
+    throw error;
   }
 
   return data;

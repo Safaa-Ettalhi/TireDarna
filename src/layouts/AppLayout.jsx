@@ -4,7 +4,8 @@ import { Button } from "../components/ui/Button";
 
 const navLinks = [
   { to: "/dashboard", label: "Tableau de bord" },
-  { to: "/properties", label: "Annonces" },
+  { to: "/properties", label: "Catalogue" },
+  { to: "/properties/manage", label: "Mes annonces" },
   { to: "/inbox", label: "Leads & Chat" },
   { to: "/financing", label: "Financement" },
 ];
@@ -25,7 +26,8 @@ export function AppLayout() {
     if (user?.role === "entreprise") {
       return [
         { to: "/dashboard", label: "Vue agence" },
-        { to: "/properties", label: "Annonces" },
+        { to: "/properties", label: "Catalogue" },
+        { to: "/properties/manage", label: "Mes annonces" },
         { to: "/inbox", label: "Leads & Chat" },
         { to: "/team", label: "Équipe & membres" },
         { to: "/financing", label: "Financement" },

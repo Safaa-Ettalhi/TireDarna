@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "../components/ui/Button";
+import { NotificationBell } from "../components/NotificationBell";
 
 const navLinks = [
   { to: "/dashboard", label: "Tableau de bord" },
@@ -62,22 +63,23 @@ export function AppLayout() {
       <div className="flex flex-col">
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-4">
           <div>
-            <p className="text-sm font-semibold text-slate-500">
-              Bienvenue sur Darna
-            </p>
+            <p className="text-sm font-semibold text-slate-500">Bienvenue sur Darna</p>
             <p className="text-lg font-bold text-slate-900">
               {user ? user.firstName ?? user.email : "Visiteur"}
             </p>
           </div>
-          {user ? (
-            <Button variant="secondary" onClick={logout}>
-              Se déconnecter
-            </Button>
-          ) : (
-            <Link to="/login" className="text-sm font-semibold text-emerald-600">
-              Se connecter
-            </Link>
-          )}
+          <div className="flex items-center gap-4">
+            {user && <NotificationBell />}
+            {user ? (
+              <Button variant="secondary" onClick={logout}>
+                Se déconnecter
+              </Button>
+            ) : (
+              <Link to="/login" className="text-sm font-semibold text-emerald-600">
+                Se connecter
+              </Link>
+            )}
+          </div>
         </header>
         <main className="flex-1 overflow-y-auto bg-slate-50 px-8 py-6">
           <Outlet />

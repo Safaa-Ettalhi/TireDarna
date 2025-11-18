@@ -296,6 +296,13 @@ export default function PropertyDetailsPage() {
                   >
                     Créer un groupe Tirelire
                   </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => navigate("/financing/banks")}
+                    className="w-full text-xs"
+                  >
+                    Voir les banques partenaires
+                  </Button>
                 </div>
               </div>
             )}

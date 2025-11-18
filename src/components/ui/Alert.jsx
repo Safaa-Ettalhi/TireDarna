@@ -1,4 +1,4 @@
-export function Alert({ variant = "info", title, message }) {
+export function Alert({ variant = "info", title, message, className = "" }) {
   const styles = {
     info: "border-blue-200 bg-blue-50 text-blue-700",
     success: "border-emerald-200 bg-emerald-50 text-emerald-700",
@@ -8,7 +8,7 @@ export function Alert({ variant = "info", title, message }) {
   const isString = typeof message === "string";
 
   return (
-    <div className={`rounded-xl border px-4 py-3 text-sm ${styles[variant]}`}>
+    <div className={`rounded-xl border px-4 py-3 text-sm ${styles[variant]} ${className}`}>
       {title && <p className="font-semibold">{title}</p>}
       {message && (
         isString ? (

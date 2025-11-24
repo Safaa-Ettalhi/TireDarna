@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { searchProperties, deleteProperty } from "../../services/propertyService";
 import { useAuth } from "../../context/AuthContext";
 import { Alert } from "../../components/ui/Alert";
+import { getMySubscription } from "../../services/subscriptionService";
 
 const STATUS_LABELS = {
   draft: "Brouillon",
@@ -48,6 +49,24 @@ export default function MyPropertiesPage() {
     enabled: Boolean(token),
   });
 
+  const subscriptionQuery = useQuery({
+    queryKey: ["mySubscription", token],
+    queryFn: () => getMySubscription(token),
+    enabled: Boolean(token),
+  });
+
+  const activeCountQuery = useQuery({
+    queryKey: ["my-properties-active-count", token],
+    queryFn: () =>
+      searchProperties(token, {
+        includeOwn: true,
+        status: "active",
+        limit: 1,
+      }),
+    select: (data) => data?.total ?? 0,
+    enabled: Boolean(token),
+  });
+
   const deleteMutation = useMutation({
     mutationFn: (propertyId) => deleteProperty(token, propertyId),
     onSuccess: () => {
@@ -80,6 +99,23 @@ export default function MyPropertiesPage() {
   }
 
   const properties = query.data?.properties ?? [];
+  const subscription = subscriptionQuery.data?.subscription ?? null;
+
+  const planMeta = useMemo(() => {
+    const plan = typeof subscription?.plan === "string" ? subscription?.plan : subscription?.plan?.name;
+    const planName = plan || "gratuit";
+    const PLAN_LIMITS = {
+      gratuit: 10,
+      pro: 100,
+      premium: Number.POSITIVE_INFINITY,
+    };
+    const limit = PLAN_LIMITS[planName] ?? PLAN_LIMITS.gratuit;
+    const activeCount = activeCountQuery.data ?? 0;
+    const remaining = Number.isFinite(limit) ? Math.max(limit - activeCount, 0) : null;
+    return { planName, limit, activeCount, remaining };
+  }, [activeCountQuery.data, subscription]);
+
+  const limitReached = Number.isFinite(planMeta.limit) && planMeta.activeCount >= planMeta.limit;
 
   return (
     <div className="space-y-6">
@@ -90,13 +126,36 @@ export default function MyPropertiesPage() {
             Retrouvez ici toutes vos annonces, quel que soit leur statut. Vous pouvez les modifier,
             les republier ou les supprimer.
           </p>
+          <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs text-slate-600">
+            <p className="font-semibold text-slate-800">Plan actuel&nbsp;: {planMeta.planName}</p>
+            {Number.isFinite(planMeta.limit) ? (
+              <p>
+                Limite de <strong>{planMeta.limit}</strong> annonces actives simultanément.{" "}
+                {planMeta.remaining === 0 ? (
+                  <span className="text-red-600">Aucune place disponible.</span>
+                ) : (
+                  <span>
+                    Il vous reste <strong>{planMeta.remaining}</strong> emplacement(s) pour publier.
+                  </span>
+                )}
+              </p>
+            ) : (
+              <p>Annonces illimitées avec votre plan premium.</p>
+            )}
+          </div>
         </div>
-        <Link
-          to="/properties/new"
-          className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
-        >
-          + Nouvelle annonce
-        </Link>
+        {limitReached ? (
+          <div className="text-sm text-amber-600">
+            Limite atteinte. Passez sur un plan supérieur dans l’espace Profil & Abonnement.
+          </div>
+        ) : (
+          <Link
+            to="/properties/new"
+            className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+          >
+            + Nouvelle annonce
+          </Link>
+        )}
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-0 shadow-sm">

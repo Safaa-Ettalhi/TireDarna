@@ -9,6 +9,7 @@ const navLinks = [
   { to: "/properties/manage", label: "Mes annonces" },
   { to: "/inbox", label: "Leads & Chat" },
   { to: "/financing", label: "Financement" },
+  { to: "/profile", label: "Profil & abonnement" },
 ];
 
 export function AppLayout() {
@@ -21,17 +22,20 @@ export function AppLayout() {
         { to: "/admin/moderation", label: "Modération" },
         { to: "/admin/kyc", label: "Validation KYC" },
         { to: "/admin/plans", label: "Plans & tarifs" },
+        { to: "/profile", label: "Profil & abonnement" },
+        { to: "/admin/banks", label: "Banques partenaires" },
         { to: "/admin/stats", label: "Statistiques" },
       ];
     }
     if (user?.role === "entreprise") {
       return [
-        { to: "/dashboard", label: "Vue agence" },
+        { to: "/dashboard", label: "Tableau de bord" },
         { to: "/properties", label: "Catalogue" },
         { to: "/properties/manage", label: "Mes annonces" },
         { to: "/inbox", label: "Leads & Chat" },
         { to: "/team", label: "Équipe & membres" },
         { to: "/financing", label: "Financement" },
+        { to: "/profile", label: "Profil & abonnement" },
       ];
     }
     return navLinks;
@@ -58,6 +62,23 @@ export function AppLayout() {
             </NavLink>
           ))}
         </nav>
+        <div className="mt-auto space-y-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
+          <p className="font-semibold uppercase tracking-wide text-slate-400">Pages système</p>
+          <div className="flex flex-col gap-1">
+            <Link to="/legal/privacy" className="hover:text-slate-900">
+              RGPD & Cookies
+            </Link>
+            <Link to="/maintenance" className="hover:text-slate-900">
+              Statut maintenance
+            </Link>
+            <Link to="/500" className="hover:text-slate-900">
+              Page incident
+            </Link>
+            <Link to="/support" className="hover:text-slate-900">
+              Support & assistance
+            </Link>
+          </div>
+        </div>
       </aside>
 
       <div className="flex flex-col">

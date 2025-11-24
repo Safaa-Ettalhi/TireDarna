@@ -3,7 +3,8 @@ import { apiFetch } from "../lib/apiClient";
 export function listBankOffers(token) {
   return apiFetch("/api/financing/offers", {
     method: "GET",
-    token,
+    // Le token est optionnel pour cette route (pas d'auth requise)
+    ...(token ? { token } : {}),
   });
 }
 
@@ -32,6 +33,15 @@ export function suggestTirelirePlan(token, payload) {
 
 export function createTirelireGroup(token, payload) {
   return apiFetch("/api/financing/simulate/tirelire/create-group", {
+    method: "POST",
+    token,
+    body: JSON.stringify(payload),
+  });
+}
+
+// Fonction pour créer une offre bancaire (admin uniquement)
+export function createBankOffer(token, payload) {
+  return apiFetch("/api/financing/offers", {
     method: "POST",
     token,
     body: JSON.stringify(payload),

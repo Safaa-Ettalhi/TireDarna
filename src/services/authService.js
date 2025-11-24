@@ -45,3 +45,20 @@ export function fetchProfile(token) {
   });
 }
 
+// Gestion des membres d'équipe (entreprises)
+export function addTeamMember(token, { companyId, memberUserId, memberEmail }) {
+  return apiFetch("/api/auth/add-member", {
+    method: "POST",
+    token,
+    body: JSON.stringify({ companyId, memberUserId, memberEmail }),
+  });
+}
+
+export function removeTeamMember(token, { companyId, memberUserId }) {
+  return apiFetch("/api/auth/remove-member", {
+    method: "POST",
+    token,
+    body: JSON.stringify({ companyId, memberUserId }),
+  });
+}
+

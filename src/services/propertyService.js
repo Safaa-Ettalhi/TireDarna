@@ -76,3 +76,10 @@ export function uploadPropertyMedia(token, propertyId, files) {
   });
 }
 
+export function getPremiumPropertyStats(token) {
+  return apiFetch("/api/properties/stats/premium", {
+    method: "GET",
+    token,
+  });
+}
+

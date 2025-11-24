@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchProperties } from "../../services/propertyService";
@@ -7,6 +7,7 @@ import { Button } from "../../components/ui/Button";
 import { useAuth } from "../../context/AuthContext";
 import { PropertyCard } from "../../components/properties/PropertyCard";
 import { Pagination } from "../../components/ui/Pagination";
+import { useRealtime } from "../../context/RealtimeContext";
 
 const TRANSACTION_OPTIONS = [
   { value: "", label: "Tous les types" },
@@ -37,6 +38,7 @@ const AMENITIES_OPTIONS = [
 
 export default function PropertiesPage() {
   const { token } = useAuth();
+  const { socket } = useRealtime();
   const navigate = useNavigate();
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [filters, setFilters] = useState({
@@ -61,6 +63,33 @@ export default function PropertiesPage() {
     queryFn: () => searchProperties(token, filters),
     enabled: !!token,
   });
+
+  const refetchTimeout = useRef(null);
+
+  useEffect(() => {
+    if (!socket) return;
+    const scheduleRefetch = () => {
+      if (refetchTimeout.current) return;
+      refetchTimeout.current = setTimeout(() => {
+        refetch();
+        refetchTimeout.current = null;
+      }, 800);
+    };
+
+    socket.on("property_created", scheduleRefetch);
+    socket.on("property_updated", scheduleRefetch);
+    socket.on("property_deleted", scheduleRefetch);
+
+    return () => {
+      socket.off("property_created", scheduleRefetch);
+      socket.off("property_updated", scheduleRefetch);
+      socket.off("property_deleted", scheduleRefetch);
+      if (refetchTimeout.current) {
+        clearTimeout(refetchTimeout.current);
+        refetchTimeout.current = null;
+      }
+    };
+  }, [socket, refetch]);
 
   const properties = data?.properties ?? [];
   const totalPages = data?.pages ?? 1;

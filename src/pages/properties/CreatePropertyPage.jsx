@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Alert } from "../../components/ui/Alert";
 import { PropertyForm } from "../../components/properties/PropertyForm";
 import {
   createProperty,
+  searchProperties,
   uploadPropertyMedia,
 } from "../../services/propertyService";
 import { useAuth } from "../../context/AuthContext";
+import { getMySubscription } from "../../services/subscriptionService";
 
 const initialForm = {
   title: "",
@@ -34,6 +36,24 @@ export default function CreatePropertyPage() {
     mutationFn: ({ propertyId, files }) => uploadPropertyMedia(token, propertyId, files),
   });
 
+  const subscriptionQuery = useQuery({
+    queryKey: ["mySubscription", token],
+    queryFn: () => getMySubscription(token),
+    enabled: Boolean(token),
+  });
+
+  const activePropertiesQuery = useQuery({
+    queryKey: ["my-properties-active-count", token],
+    queryFn: () =>
+      searchProperties(token, {
+        includeOwn: true,
+        status: "active",
+        limit: 1,
+      }),
+    select: (data) => data?.total ?? 0,
+    enabled: Boolean(token),
+  });
+
   if (!token) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -46,7 +66,30 @@ export default function CreatePropertyPage() {
     );
   }
 
+  const planMeta = useMemo(() => {
+    const subscription = subscriptionQuery.data?.subscription ?? null;
+    const plan = typeof subscription?.plan === "string" ? subscription?.plan : subscription?.plan?.name;
+    const planName = plan || "gratuit";
+    const PLAN_LIMITS = {
+      gratuit: 10,
+      pro: 100,
+      premium: Number.POSITIVE_INFINITY,
+    };
+    const limit = PLAN_LIMITS[planName] ?? PLAN_LIMITS.gratuit;
+    const activeCount = activePropertiesQuery.data ?? 0;
+    const remaining = Number.isFinite(limit) ? Math.max(limit - activeCount, 0) : null;
+    return { planName, limit, activeCount, remaining };
+  }, [activePropertiesQuery.data, subscriptionQuery.data]);
+
+  const limitReached = Number.isFinite(planMeta.limit) && planMeta.activeCount >= planMeta.limit;
+
   async function handleSubmit({ form, files }) {
+    if (limitReached) {
+      setServerError(
+        "Vous avez atteint la limite d'annonces actives pour votre plan. Supprimez ou archivez une annonce, ou changez de plan."
+      );
+      return;
+    }
     setServerError("");
     const payload = {
       title: form.title,
@@ -83,6 +126,29 @@ export default function CreatePropertyPage() {
       setServerError(error.message || "Impossible de créer l'annonce.");
       throw error;
     }
+  }
+
+  if (subscriptionQuery.isLoading || activePropertiesQuery.isLoading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <p className="text-sm text-slate-500">Chargement de vos informations d’abonnement...</p>
+      </div>
+    );
+  }
+
+  if (limitReached) {
+    return (
+      <div className="space-y-6">
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-800">
+          <h1 className="text-lg font-semibold">Limite atteinte pour le plan {planMeta.planName}</h1>
+          <p className="mt-2 text-sm">
+            Vous pouvez publier au maximum {planMeta.limit} annonce(s) active(s) avec votre plan actuel.
+            Archivez une annonce existante ou passez sur un plan supérieur depuis la page Profil & Abonnement
+            pour continuer à publier.
+          </p>
+        </section>
+      </div>
+    );
   }
 
   return (

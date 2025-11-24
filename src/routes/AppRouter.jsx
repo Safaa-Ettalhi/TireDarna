@@ -1,15 +1,37 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "../context/AuthContext";
+import { RealtimeProvider } from "../context/RealtimeContext";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
 import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
+import PropertiesPage from "../pages/properties/PropertiesPage";
+import CreatePropertyPage from "../pages/properties/CreatePropertyPage";
+import MyPropertiesPage from "../pages/properties/MyPropertiesPage";
+import EditPropertyPage from "../pages/properties/EditPropertyPage";
+import PropertyDetailsPage from "../pages/properties/PropertyDetailsPage";
+import FinancingPage from "../pages/financing/FinancingPage";
+import LoanSimulatorPage from "../pages/financing/LoanSimulatorPage";
+import MyTirelireGroupsPage from "../pages/financing/MyTirelireGroupsPage";
+import AllTirelireGroupsPage from "../pages/financing/AllTirelireGroupsPage";
+import TirelireGroupDetailsPage from "../pages/financing/TirelireGroupDetailsPage";
+import TirelirePage from "../pages/financing/TirelirePage";
+import BanksPage from "../pages/financing/BanksPage";
 import { AppLayout } from "../layouts/AppLayout";
 import { RequireAuth } from "./RequireAuth";
 import { ForbiddenPage } from "../pages/system/ForbiddenPage";
+import NotFoundPage from "../pages/system/NotFoundPage";
+import ServerErrorPage from "../pages/system/ServerErrorPage";
+import MaintenancePage from "../pages/system/MaintenancePage";
+import PrivacyPage from "../pages/system/PrivacyPage";
+import SupportPage from "../pages/system/SupportPage";
+import InboxPage from "../pages/inbox/InboxPage";
+import BanksManagementPage from "../pages/admin/BanksManagementPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import TeamPage from "../pages/team/TeamPage";
 
 const queryClient = new QueryClient();
 
@@ -23,13 +45,30 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <DashboardPage /> },
           { path: "dashboard", element: <DashboardPage /> },
-          { path: "properties", element: <PlaceholderPage title="Annonces" /> },
-          { path: "inbox", element: <PlaceholderPage title="Leads & Chat" /> },
-          { path: "financing", element: <PlaceholderPage title="Financement" /> },
+          { path: "properties", element: <PropertiesPage /> },
+          { path: "properties/new", element: <CreatePropertyPage /> },
+          { path: "properties/manage", element: <MyPropertiesPage /> },
+          { path: "properties/:id/edit", element: <EditPropertyPage /> },
+          { path: "properties/:id", element: <PropertyDetailsPage /> },
+          { path: "inbox", element: <InboxPage /> },
+          { path: "profile", element: <ProfilePage /> },
+          {
+            path: "financing",
+            element: <FinancingPage />,
+            children: [
+              { index: true, element: <LoanSimulatorPage /> },
+              { path: "simulator", element: <LoanSimulatorPage /> },
+              { path: "tirelire", element: <TirelirePage /> },
+              { path: "tirelire/available", element: <AllTirelireGroupsPage /> },
+              { path: "tirelire/my-groups", element: <MyTirelireGroupsPage /> },
+              { path: "tirelire/:id", element: <TirelireGroupDetailsPage /> },
+              { path: "banks", element: <BanksPage /> },
+            ],
+          },
           {
             element: <RequireAuth allowedRoles={["entreprise"]} />,
             children: [
-              { path: "team", element: <PlaceholderPage title="Gestion de l'équipe" /> },
+              { path: "team", element: <TeamPage /> },
             ],
           },
           {
@@ -39,6 +78,7 @@ const router = createBrowserRouter([
               { path: "admin/kyc", element: <PlaceholderPage title="Validation KYC" /> },
               { path: "admin/plans", element: <PlaceholderPage title="Plans & tarifs" /> },
               { path: "admin/stats", element: <PlaceholderPage title="Statistiques globales" /> },
+              { path: "admin/banks", element: <BanksManagementPage /> },
             ],
           },
         ],
@@ -51,6 +91,11 @@ const router = createBrowserRouter([
   { path: "/reset-password", element: <ResetPasswordPage /> },
   { path: "/verify-email", element: <VerifyEmailPage /> },
   { path: "/forbidden", element: <ForbiddenPage /> },
+  { path: "/500", element: <ServerErrorPage /> },
+  { path: "/maintenance", element: <MaintenancePage /> },
+  { path: "/legal/privacy", element: <PrivacyPage /> },
+  { path: "/support", element: <SupportPage /> },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 
 function PlaceholderPage({ title }) {
@@ -65,7 +110,9 @@ export function AppRouter() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <RealtimeProvider>
+          <RouterProvider router={router} />
+        </RealtimeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

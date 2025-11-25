@@ -401,7 +401,7 @@ export default function InboxPage() {
       socket.emit("call_decline", { reason, roomId });
     }
     logCallEvent("call_declined", null, roomId);
-    endCall({ systemType: "call_declined" });
+    endCall({ systemType: "call_declined", suppressLog: true });
   }
 
   function handleCancelCall() {
@@ -1436,34 +1436,32 @@ export default function InboxPage() {
                     <p className="mt-1 text-xs text-red-600">
                       Cette action est irréversible. Tous les messages seront supprimés.
                     </p>
-                    <div className="mt-3 flex gap-2">
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setShowDeleteConfirm(false);
-                          setThreadMenuOpen(false);
-                        }}
-                        className="text-slate-600 hover:bg-slate-100"
-                      >
-                        Annuler
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          if (activeThread?._id) {
-                            deleteThreadMutation.mutate(activeThread._id);
-                          }
-                        }}
-                        disabled={deleteThreadMutation.isLoading}
-                        className="bg-red-600 text-white hover:bg-red-700"
-                      >
-                        {deleteThreadMutation.isLoading ? "Suppression..." : "Supprimer"}
-                      </Button>
-                    </div>
+                    <div className="mt-4 flex gap-3">
+  <button
+    type="button"
+    onClick={() => {
+      setShowDeleteConfirm(false);
+      setThreadMenuOpen(false);
+    }}
+    className="px-4 py-2 text-sm rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-100 transition"
+  >
+    Annuler
+  </button>
+
+  <button
+    type="button"
+    onClick={() => {
+      if (activeThread?._id) {
+        deleteThreadMutation.mutate(activeThread._id);
+      }
+    }}
+    disabled={deleteThreadMutation.isLoading}
+    className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 transition"
+  >
+    {deleteThreadMutation.isLoading ? "Suppression..." : "Supprimer"}
+  </button>
+</div>
+
                   </div>
                 )}
                 {renderCallBanner()}

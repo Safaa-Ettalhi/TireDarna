@@ -1,11 +1,15 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export function RequireAuth({ allowedRoles }) {
+export function RequireAuth({ allowedRoles, fallback = null }) {
   const { token, user } = useAuth();
+  const location = useLocation();
 
   if (!token || !user) {
-    return <Navigate to="/login" replace />;
+    if (fallback && location.pathname === "/") {
+      return fallback;
+    }
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {

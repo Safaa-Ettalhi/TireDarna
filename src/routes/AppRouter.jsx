@@ -32,12 +32,14 @@ import InboxPage from "../pages/inbox/InboxPage";
 import BanksManagementPage from "../pages/admin/BanksManagementPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import TeamPage from "../pages/team/TeamPage";
+import HomePage from "../pages/home/HomePage";
+import PromotionsBadgesPage from "../pages/properties/PromotionsBadgesPage";
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    element: <RequireAuth />,
+    element: <RequireAuth fallback={<HomePage />} />,
     children: [
       {
         path: "/",
@@ -50,6 +52,7 @@ const router = createBrowserRouter([
           { path: "properties/manage", element: <MyPropertiesPage /> },
           { path: "properties/:id/edit", element: <EditPropertyPage /> },
           { path: "properties/:id", element: <PropertyDetailsPage /> },
+          { path: "properties/promotions", element: <PromotionsBadgesPage /> },
           { path: "inbox", element: <InboxPage /> },
           { path: "profile", element: <ProfilePage /> },
           {

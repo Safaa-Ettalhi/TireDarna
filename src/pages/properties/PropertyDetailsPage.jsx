@@ -328,6 +328,37 @@ export default function PropertyDetailsPage() {
             </div>
           </section>
         )}
+
+        {!!property.internalRules?.length && (
+          <section className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <div className="flex items-center gap-2">
+              <i className="ri-file-list-3-line text-lg text-slate-600" />
+              <h2 className="text-lg font-semibold text-slate-900">Règles internes</h2>
+            </div>
+            <ul className="space-y-2 text-sm text-slate-700">
+              {property.internalRules.map((rule, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="mt-0.5 text-emerald-500">
+                    <i className="ri-checkbox-circle-line" />
+                  </span>
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {property.energyDiagnostics && (
+          <section className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <div className="flex items-center gap-2">
+              <i className="ri-leaf-line text-lg text-emerald-600" />
+              <h2 className="text-lg font-semibold text-slate-900">Diagnostic énergétique</h2>
+            </div>
+            <div className="rounded-lg bg-white p-4 text-sm text-slate-700">
+              <p className="whitespace-pre-line leading-relaxed">{property.energyDiagnostics}</p>
+            </div>
+          </section>
+        )}
       </section>
     </div>
   );

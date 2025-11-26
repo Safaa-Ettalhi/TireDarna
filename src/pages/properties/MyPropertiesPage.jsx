@@ -5,6 +5,7 @@ import { searchProperties, deleteProperty, updateProperty } from "../../services
 import { useAuth } from "../../context/AuthContext";
 import { Alert } from "../../components/ui/Alert";
 import { getMySubscription } from "../../services/subscriptionService";
+import { PlanBadge, getPlanKey, getPlanLabel } from "../../components/badges/PlanBadge";
 
 const STATUS_LABELS = {
   all: "Toutes",
@@ -55,47 +56,6 @@ function StatusBadge({ status }) {
   return (
     <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${style}`}>
       {label}
-    </span>
-  );
-}
-
-const PLAN_BADGE_STYLES = {
-  gratuit: "bg-slate-100 text-slate-600",
-  pro: "bg-sky-100 text-sky-700",
-  premium: "bg-purple-100 text-purple-700",
-};
-
-const PLAN_LABELS = {
-  gratuit: "Plan Gratuit",
-  pro: "Plan Pro",
-  premium: "Plan Premium",
-};
-
-const normalizePlanKey = (value) => {
-  if (!value) return null;
-  if (typeof value === "string") {
-    return value.toLowerCase();
-  }
-  if (typeof value === "object") {
-    if (typeof value.name === "string") {
-      return value.name.toLowerCase();
-    }
-    if (typeof value.slug === "string") {
-      return value.slug.toLowerCase();
-    }
-  }
-  return null;
-};
-
-const getPlanLabel = (key) => PLAN_LABELS[key] ?? `Plan ${key?.charAt(0).toUpperCase()}${key?.slice(1) ?? ""}`;
-
-function PlanBadge({ planKey }) {
-  if (!planKey) return null;
-  const normalized = planKey.toLowerCase();
-  const style = PLAN_BADGE_STYLES[normalized] ?? "bg-slate-100 text-slate-600";
-  return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${style}`}>
-      {getPlanLabel(normalized)}
     </span>
   );
 }
@@ -228,8 +188,8 @@ export default function MyPropertiesPage() {
 
   const planMeta = useMemo(() => {
     const planKey =
-      normalizePlanKey(subscription?.plan) ??
-      normalizePlanKey(user?.subscription?.plan) ??
+      getPlanKey(subscription?.plan) ??
+      getPlanKey(user?.subscription?.plan) ??
       "gratuit";
     const PLAN_LIMITS = {
       gratuit: 10,
@@ -280,7 +240,16 @@ export default function MyPropertiesPage() {
             les republier ou les supprimer.
           </p>
           <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs text-slate-600">
-            <p className="font-semibold text-slate-800">Plan actuel&nbsp;: {planMeta.planLabel}</p>
+            <div className="flex items-center justify-between">
+              <p className="font-semibold text-slate-800">Plan actuel&nbsp;: {planMeta.planLabel}</p>
+              <Link
+                to="/properties/promotions"
+                className="text-emerald-600 hover:text-emerald-700 hover:underline"
+              >
+                <i className="ri-information-line mr-1" />
+                En savoir plus
+              </Link>
+            </div>
             {Number.isFinite(planMeta.limit) ? (
               <p>
                 Limite de <strong>{planMeta.limit}</strong> annonces actives simultanément.{" "}
@@ -439,7 +408,7 @@ export default function MyPropertiesPage() {
                     <td className="px-6 py-3">
                       <div className="flex flex-col gap-2">
                         {(() => {
-                          const ownerPlanKey = normalizePlanKey(property.ownerId?.subscription?.plan);
+                          const ownerPlanKey = getPlanKey(property.ownerId?.subscription?.plan);
                           const ownerIdValue =
                             (property.ownerId &&
                               typeof property.ownerId === "object" &&
@@ -450,7 +419,7 @@ export default function MyPropertiesPage() {
                             ownerIdValue &&
                             ownerIdValue.toString() === currentUserId.toString?.();
                           const finalPlanKey = ownerPlanKey ?? (isMine ? planMeta.planKey : null) ?? planMeta.planKey;
-                          return <PlanBadge planKey={finalPlanKey} />;
+                          return <PlanBadge plan={finalPlanKey} />;
                         })()}
                         <PriorityBadge priority={property.priorityScore} />
                         {property.boostExpiresAt && (

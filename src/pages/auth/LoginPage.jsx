@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
@@ -10,14 +10,17 @@ import { Alert } from "../../components/ui/Alert";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login: setAuth } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("redirect") || "/dashboard";
 
   const mutation = useMutation({
     mutationFn: login,
     onSuccess(data) {
       setAuth({ token: data.token, user: data.user });
-      navigate("/dashboard");
+      navigate(redirectTo, { replace: true });
     },
   });
 

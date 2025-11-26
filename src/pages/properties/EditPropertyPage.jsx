@@ -11,20 +11,9 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { Alert } from "../../components/ui/Alert";
 
-const EMPTY_FORM = {
-  title: "",
-  description: "",
-  transactionType: "sale",
-  price: "",
-  address: "",
-  surface: "",
-  rooms: "",
-  status: "pending_moderation",
-};
-
 export default function EditPropertyPage() {
   const { id } = useParams();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
 
@@ -77,7 +66,51 @@ export default function EditPropertyPage() {
     );
   }
 
-  const property = propertyQuery.data?.property;
+  const property = propertyQuery.data?.property ?? null;
+  const isAdmin = user?.role === "admin";
+
+  const initialValues = (() => {
+    if (!property) {
+      return {
+        title: "",
+        description: "",
+        transactionType: "sale",
+        price: "",
+        address: "",
+        surface: "",
+        rooms: "",
+        status: "pending_moderation",
+        amenities: [],
+      };
+    }
+
+    const normalizedStatus = (() => {
+      if (isAdmin) {
+        return property.status ?? "pending_moderation";
+      }
+      if (property.status === "published") {
+        return "pending_moderation";
+      }
+      if (property.status === "rejected") {
+        return "draft";
+      }
+      return property.status ?? "pending_moderation";
+    })();
+
+    return {
+      title: property.title ?? "",
+      description: property.description ?? "",
+      transactionType: property.transactionType ?? "sale",
+      price: property.price != null ? property.price.toString() : "",
+      pricePerDay: property.pricePerDay != null ? property.pricePerDay.toString() : "",
+      address: property.address ?? "",
+      surface: property.surface != null ? property.surface.toString() : "",
+      rooms: property.rooms != null ? property.rooms.toString() : "",
+      bathrooms: property.bathrooms != null ? property.bathrooms.toString() : "1",
+      status: normalizedStatus,
+      amenities: property.amenities || [],
+    };
+  })();
 
   if (!property) {
     return (
@@ -89,18 +122,6 @@ export default function EditPropertyPage() {
     );
   }
 
-  const initialValues = {
-    title: property.title ?? "",
-    description: property.description ?? "",
-    transactionType: property.transactionType ?? "sale",
-    price: property.price != null ? property.price.toString() : "",
-    address: property.address ?? "",
-    surface: property.surface != null ? property.surface.toString() : "",
-    rooms: property.rooms != null ? property.rooms.toString() : "",
-    status: property.status ?? "pending_moderation",
-    amenities: property.amenities || [],
-  };
-
   async function handleSubmit({ form, files }) {
     setServerError("");
     const payload = {
@@ -108,9 +129,11 @@ export default function EditPropertyPage() {
       description: form.description,
       transactionType: form.transactionType,
       price: Number(form.price),
+      pricePerDay: form.pricePerDay ? Number(form.pricePerDay) : undefined,
       address: form.address,
       surface: Number(form.surface),
       rooms: Number(form.rooms),
+      bathrooms: Number(form.bathrooms || 1),
       status: form.status,
       amenities: form.amenities || [],
     };
@@ -142,7 +165,7 @@ export default function EditPropertyPage() {
     <PropertyForm
       title="Modifier l'annonce"
       description="Actualisez les informations de votre bien et ajoutez de nouvelles photos si nécessaire."
-      initialValues={property ? initialValues : EMPTY_FORM}
+      initialValues={initialValues}
       existingMedia={property.media ?? []}
       onSubmit={handleSubmit}
       onRemoveMedia={property.media?.length ? handleRemoveMedia : undefined}
@@ -151,6 +174,8 @@ export default function EditPropertyPage() {
         updateMutation.isLoading || uploadMutation.isLoading || removeMediaMutation.isLoading
       }
       serverError={serverError}
+      allowStatusEdit={true}
+      allowedStatuses={isAdmin ? null : ["draft", "pending_moderation"]}
     />
   );
 }

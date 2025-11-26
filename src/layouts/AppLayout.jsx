@@ -82,13 +82,7 @@ export function AppLayout() {
       </aside>
 
       <div className="flex flex-col">
-        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-4">
-          <div>
-            <p className="text-sm font-semibold text-slate-500">Bienvenue sur Darna</p>
-            <p className="text-lg font-bold text-slate-900">
-              {user ? user.firstName ?? user.email : "Visiteur"}
-            </p>
-          </div>
+        <header className="flex items-center justify-end border-b border-slate-200 bg-white px-8 py-4">
           <div className="flex items-center gap-4">
             {user && <NotificationBell />}
             {user ? (

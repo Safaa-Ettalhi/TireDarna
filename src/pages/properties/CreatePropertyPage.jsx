@@ -16,10 +16,12 @@ const initialForm = {
   description: "",
   transactionType: "sale",
   price: "",
+  pricePerDay: "",
   address: "",
   surface: "",
   rooms: "",
-  status: "published",
+  bathrooms: "1",
+  status: "pending_moderation",
   amenities: [],
 };
 
@@ -96,9 +98,11 @@ export default function CreatePropertyPage() {
       description: form.description,
       transactionType: form.transactionType,
       price: Number(form.price),
+      pricePerDay: form.pricePerDay ? Number(form.pricePerDay) : undefined,
       address: form.address,
       surface: Number(form.surface),
       rooms: Number(form.rooms),
+      bathrooms: Number(form.bathrooms || 1),
       status: form.status || undefined,
       availability: {
         from: new Date().toISOString(),
@@ -108,7 +112,6 @@ export default function CreatePropertyPage() {
         type: "Point",
         coordinates: [0, 0],
       },
-      bathrooms: 1,
       amenities: form.amenities || [],
       internalRules: [],
     };
@@ -154,12 +157,14 @@ export default function CreatePropertyPage() {
   return (
     <PropertyForm
       title="Créer une annonce"
-      description="Complétez les informations principales de votre bien. Vous pourrez enrichir l’annonce avec des options avancées plus tard."
+      description="Complétez les informations principales de votre bien. Vous pourrez enrichir l'annonce avec des options avancées plus tard."
       initialValues={initialForm}
       onSubmit={handleSubmit}
-      submitLabel="Publier l'annonce"
+      submitLabel="Enregistrer l'annonce"
       isSubmitting={createMutation.isLoading || uploadMutation.isLoading}
       serverError={serverError}
+      allowStatusEdit={true}
+      allowedStatuses={["draft", "pending_moderation"]}
     />
   );
 }

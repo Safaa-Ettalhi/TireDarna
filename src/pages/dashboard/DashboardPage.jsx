@@ -7,6 +7,7 @@ import { getOwnerLeads, getBuyerLeads } from "../../services/leadService";
 import { getMySubscription } from "../../services/subscriptionService";
 import { fetchProfile } from "../../services/authService";
 import { Button } from "../../components/ui/Button";
+import AdminDashboardPage from "../admin/AdminDashboardPage";
 
 export default function DashboardPage() {
   const { user, token } = useAuth();
@@ -176,17 +177,7 @@ export default function DashboardPage() {
   }
 
   if (isAdmin) {
-    return (
-      <div className="space-y-6">
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Espace administrateur</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Les écrans statistiques, modération, plans et KYC seront connectés aux API admin. Utilisez le menu
-            Admin pour les consulter.
-          </p>
-        </section>
-      </div>
-    );
+    return <AdminDashboardPage />;
   }
 
   return (

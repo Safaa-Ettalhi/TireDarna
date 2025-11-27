@@ -18,7 +18,7 @@ export function AppLayout() {
   const links = (() => {
     if (user?.role === "admin") {
       return [
-        { to: "/dashboard", label: "Dashboard" },
+        { to: "/admin/dashboard", label: "Tableau de bord" },
         { to: "/admin/moderation", label: "Modération" },
         { to: "/admin/kyc", label: "Validation KYC" },
         { to: "/admin/plans", label: "Plans & tarifs" },
@@ -44,7 +44,10 @@ export function AppLayout() {
   return (
     <div className="grid min-h-screen grid-cols-[260px,1fr] bg-slate-100">
       <aside className="flex flex-col gap-4 border-r border-slate-200 bg-white px-6 py-8">
-        <Link to="/" className="text-xl font-semibold text-emerald-600">
+        <Link
+          to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+          className="text-xl font-semibold text-emerald-600"
+        >
           Darna Platform
         </Link>
         <nav className="flex flex-col gap-2 text-sm font-medium text-slate-600">

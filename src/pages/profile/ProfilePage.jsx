@@ -434,55 +434,6 @@ export default function ProfilePage() {
         )}
       </section>
 
-      {nextPlanDefinition && (
-        <section className="rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-white p-6 shadow-inner">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-3">
-              <PlanBadge plan={nextPlanKey} variant="soft" className="border-emerald-100 bg-white" />
-              <h3 className="text-xl font-semibold text-slate-900">
-                Passez sur {getPlanLabel(nextPlanKey)} et décuplez votre visibilité
-              </h3>
-              <p className="text-sm text-slate-600">
-                {nextPlanKey === "pro"
-                  ? "Mettez vos annonces en avant avec le badge Pro, des boosts automatiques et des statistiques détaillées."
-                  : "Profitez d’un ultra boost permanent, d’un account manager dédié et d’une analyse temps réel."}
-              </p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
-                {(upgradeBullets[nextPlanKey] || []).map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex flex-col gap-2 rounded-2xl border border-emerald-100 bg-white/70 p-5 shadow">
-              <p className="text-3xl font-bold text-slate-900">
-                {nextPlanDefinition.price
-                  ? `${nextPlanDefinition.price.toLocaleString("fr-FR")} dh`
-                  : "Gratuit"}
-                <span className="text-sm font-normal text-slate-500">
-                  / {nextPlanDefinition.duration === "monthly" ? "mois" : "an"}
-                </span>
-              </p>
-              <Button
-                className="w-full"
-                onClick={() => handlePlanSelection(nextPlanDefinition)}
-                disabled={subscribeMutation.isLoading || stripeSessionMutation.isLoading}
-              >
-                {nextPlanKey === "pro" ? "Activer le plan Pro" : "Passer au Premium"}
-              </Button>
-              <Link
-                to="/properties/promotions"
-                className="text-center text-xs text-emerald-600 hover:text-emerald-700 hover:underline"
-              >
-                En savoir plus sur les badges et promotions
-              </Link>
-              <p className="text-xs text-slate-500">
-                Paiement sécurisé via Stripe. Résiliation possible à tout moment.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
       {user?.accountType === "entreprise" && (
         <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
@@ -592,6 +543,57 @@ export default function ProfilePage() {
           )}
         </section>
       )}
+
+      {nextPlanDefinition && (
+        <section className="rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-white p-6 shadow-inner">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="space-y-3">
+              <PlanBadge plan={nextPlanKey} variant="soft" className="border-emerald-100 bg-white" />
+              <h3 className="text-xl font-semibold text-slate-900">
+                Passez sur {getPlanLabel(nextPlanKey)} et décuplez votre visibilité
+              </h3>
+              <p className="text-sm text-slate-600">
+                {nextPlanKey === "pro"
+                  ? "Mettez vos annonces en avant avec le badge Pro, des boosts automatiques et des statistiques détaillées."
+                  : "Profitez d’un ultra boost permanent, d’un account manager dédié et d’une analyse temps réel."}
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                {(upgradeBullets[nextPlanKey] || []).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex flex-col gap-2 rounded-2xl border border-emerald-100 bg-white/70 p-5 shadow">
+              <p className="text-3xl font-bold text-slate-900">
+                {nextPlanDefinition.price
+                  ? `${nextPlanDefinition.price.toLocaleString("fr-FR")} dh`
+                  : "Gratuit"}
+                <span className="text-sm font-normal text-slate-500">
+                  / {nextPlanDefinition.duration === "monthly" ? "mois" : "an"}
+                </span>
+              </p>
+              <Button
+                className="w-full"
+                onClick={() => handlePlanSelection(nextPlanDefinition)}
+                disabled={subscribeMutation.isLoading || stripeSessionMutation.isLoading}
+              >
+                {nextPlanKey === "pro" ? "Activer le plan Pro" : "Passer au Premium"}
+              </Button>
+              <Link
+                to="/properties/promotions"
+                className="text-center text-xs text-emerald-600 hover:text-emerald-700 hover:underline"
+              >
+                En savoir plus sur les badges et promotions
+              </Link>
+              <p className="text-xs text-slate-500">
+                Paiement sécurisé via Stripe. Résiliation possible à tout moment.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+
 
       <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">

@@ -30,6 +30,11 @@ import PrivacyPage from "../pages/system/PrivacyPage";
 import SupportPage from "../pages/system/SupportPage";
 import InboxPage from "../pages/inbox/InboxPage";
 import BanksManagementPage from "../pages/admin/BanksManagementPage";
+import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import AdminModerationPage from "../pages/admin/AdminModerationPage";
+import AdminPlansPage from "../pages/admin/AdminPlansPage";
+import AdminKycPage from "../pages/admin/AdminKycPage";
+import AdminStatsPage from "../pages/admin/AdminStatsPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import TeamPage from "../pages/team/TeamPage";
 import HomePage from "../pages/home/HomePage";
@@ -77,10 +82,11 @@ const router = createBrowserRouter([
           {
             element: <RequireAuth allowedRoles={["admin"]} />,
             children: [
-              { path: "admin/moderation", element: <PlaceholderPage title="Modération annonces" /> },
-              { path: "admin/kyc", element: <PlaceholderPage title="Validation KYC" /> },
-              { path: "admin/plans", element: <PlaceholderPage title="Plans & tarifs" /> },
-              { path: "admin/stats", element: <PlaceholderPage title="Statistiques globales" /> },
+              { path: "admin/dashboard", element: <AdminDashboardPage /> },
+              { path: "admin/moderation", element: <AdminModerationPage /> },
+              { path: "admin/kyc", element: <AdminKycPage /> },
+              { path: "admin/plans", element: <AdminPlansPage /> },
+              { path: "admin/stats", element: <AdminStatsPage /> },
               { path: "admin/banks", element: <BanksManagementPage /> },
             ],
           },

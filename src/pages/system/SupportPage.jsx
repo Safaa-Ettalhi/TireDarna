@@ -34,6 +34,12 @@ export default function SupportPage() {
 
   return (
     <section className="mx-auto max-w-4xl space-y-6 px-6 py-10">
+      <Link
+        to="/dashboard"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700"
+      >
+        <span aria-hidden="true">←</span> Retour au tableau de bord
+      </Link>
       <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-500">
           Assistance

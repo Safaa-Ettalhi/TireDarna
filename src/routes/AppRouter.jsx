@@ -36,11 +36,14 @@ import AdminModerationPage from "../pages/admin/AdminModerationPage";
 import AdminPlansPage from "../pages/admin/AdminPlansPage";
 import AdminKycPage from "../pages/admin/AdminKycPage";
 import AdminStatsPage from "../pages/admin/AdminStatsPage";
+import AdminUsersPage from "../pages/admin/AdminUsersPage";
+import AdminSupportPage from "../pages/admin/AdminSupportPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import TeamPage from "../pages/team/TeamPage";
 import HomePage from "../pages/home/HomePage";
 import PromotionsBadgesPage from "../pages/properties/PromotionsBadgesPage";
 import CookieConsentBanner from "../components/system/CookieConsentBanner.jsx";
+import { UserSessionBridge } from "../components/realtime/UserSessionBridge.jsx";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +93,8 @@ const router = createBrowserRouter([
               { path: "admin/plans", element: <AdminPlansPage /> },
               { path: "admin/stats", element: <AdminStatsPage /> },
               { path: "admin/banks", element: <BanksManagementPage /> },
+              { path: "admin/users", element: <AdminUsersPage /> },
+              { path: "admin/support", element: <AdminSupportPage /> },
             ],
           },
         ],
@@ -124,6 +129,7 @@ export function AppRouter() {
       <AuthProvider>
         <RealtimeProvider>
           <>
+            <UserSessionBridge />
             <RouterProvider router={router} />
             <CookieConsentBanner />
           </>

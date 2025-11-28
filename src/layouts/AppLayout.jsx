@@ -23,6 +23,7 @@ export function AppLayout() {
         { to: "/admin/kyc", label: "Validation KYC" },
         { to: "/admin/plans", label: "Plans & tarifs" },
         { to: "/admin/users", label: "Utilisateurs" },
+        { to: "/admin/support", label: "Support" },
         { to: "/profile", label: "Profil & abonnement" },
         { to: "/admin/banks", label: "Banques partenaires" },
         { to: "/admin/stats", label: "Statistiques" },

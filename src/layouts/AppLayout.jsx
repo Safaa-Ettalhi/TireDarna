@@ -69,7 +69,10 @@ export function AppLayout() {
           <p className="font-semibold uppercase tracking-wide text-slate-400">Pages système</p>
           <div className="flex flex-col gap-1">
             <Link to="/legal/privacy" className="hover:text-slate-900">
-              RGPD & Cookies
+              Politique de confidentialité
+            </Link>
+            <Link to="/legal/cookies" className="hover:text-slate-900">
+              Préférences cookies
             </Link>
             <Link to="/maintenance" className="hover:text-slate-900">
               Statut maintenance

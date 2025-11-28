@@ -27,6 +27,7 @@ import NotFoundPage from "../pages/system/NotFoundPage";
 import ServerErrorPage from "../pages/system/ServerErrorPage";
 import MaintenancePage from "../pages/system/MaintenancePage";
 import PrivacyPage from "../pages/system/PrivacyPage";
+import CookiesPage from "../pages/system/CookiesPage";
 import SupportPage from "../pages/system/SupportPage";
 import InboxPage from "../pages/inbox/InboxPage";
 import BanksManagementPage from "../pages/admin/BanksManagementPage";
@@ -39,6 +40,7 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import TeamPage from "../pages/team/TeamPage";
 import HomePage from "../pages/home/HomePage";
 import PromotionsBadgesPage from "../pages/properties/PromotionsBadgesPage";
+import CookieConsentBanner from "../components/system/CookieConsentBanner.jsx";
 
 const queryClient = new QueryClient();
 
@@ -103,6 +105,7 @@ const router = createBrowserRouter([
   { path: "/500", element: <ServerErrorPage /> },
   { path: "/maintenance", element: <MaintenancePage /> },
   { path: "/legal/privacy", element: <PrivacyPage /> },
+  { path: "/legal/cookies", element: <CookiesPage /> },
   { path: "/support", element: <SupportPage /> },
   { path: "*", element: <NotFoundPage /> },
 ]);
@@ -120,7 +123,10 @@ export function AppRouter() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RealtimeProvider>
-          <RouterProvider router={router} />
+          <>
+            <RouterProvider router={router} />
+            <CookieConsentBanner />
+          </>
         </RealtimeProvider>
       </AuthProvider>
     </QueryClientProvider>

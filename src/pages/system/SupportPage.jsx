@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "../../components/ui/Button";
 import { TextField } from "../../components/ui/TextField";
+import { useAuth } from "../../context/AuthContext";
+import { submitSupportTicket } from "../../services/supportService";
 
 const categories = [
   { id: "billing", label: "Facturation & abonnements" },
@@ -12,6 +14,7 @@ const categories = [
 ];
 
 export default function SupportPage() {
+  const { token } = useAuth();
   const [form, setForm] = useState({
     subject: "",
     category: "billing",
@@ -19,17 +22,49 @@ export default function SupportPage() {
     email: "",
   });
   const [sent, setSent] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleChange(event) {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setSent(false);
+    setError(null);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-   
-    setSent(true);
+    if (!form.email || !form.subject || !form.message) {
+      setError("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError(null);
+    setSent(false);
+
+    try {
+      const response = await submitSupportTicket(form, token);
+      
+      if (response && response.success !== false) {
+        setSent(true);
+        setForm({
+          subject: "",
+          category: "billing",
+          message: "",
+          email: "",
+        });
+        setTimeout(() => setSent(false), 5000);
+      } else {
+        setError(response?.message || "Une erreur est survenue lors de l'envoi du ticket.");
+      }
+    } catch (error) {
+      console.error("Support ticket error", error);
+      const errorMessage = error?.response?.data?.message || error?.message || "Impossible d'envoyer le ticket. Veuillez réessayer plus tard.";
+      setError(errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -112,13 +147,25 @@ export default function SupportPage() {
         </div>
 
         {sent && (
-          <p className="text-sm font-semibold text-emerald-600">
-            Merci ! Votre demande a bien été envoyée. Nous revenons vers vous sous 24h ouvrées.
-          </p>
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+            <p className="text-sm font-semibold text-emerald-700">
+              ✓ Merci ! Votre demande a bien été envoyée. Nous revenons vers vous le plus vite possible.
+            </p>
+          </div>
+        )}
+
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+            <p className="text-sm font-semibold text-red-700">
+              ✗ {error}
+            </p>
+          </div>
         )}
 
         <div className="flex justify-end">
-          <Button type="submit">Envoyer la demande</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Envoi en cours..." : "Envoyer la demande"}
+          </Button>
         </div>
       </form>
 

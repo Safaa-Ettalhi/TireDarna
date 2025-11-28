@@ -61,3 +61,30 @@ export function resetPlansToDefault(token) {
   });
 }
 
+export function getUsers(token, params = {}) {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) query.set(key, value);
+  });
+  const suffix = query.toString() ? `?${query.toString()}` : "";
+  return apiFetch(`/api/admin/users${suffix}`, {
+    method: "GET",
+    token,
+  });
+}
+
+export function updateUser(token, userId, payload) {
+  return apiFetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    token,
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getSystemSettings(token) {
+  return apiFetch("/api/admin/system/settings", {
+    method: "GET",
+    token,
+  });
+}
+

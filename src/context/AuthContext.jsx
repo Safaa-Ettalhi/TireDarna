@@ -32,6 +32,12 @@ export function AuthProvider({ children }) {
       logout() {
         setAuthState({ user: null, token: null });
       },
+      updateUser(nextUser) {
+        setAuthState((prev) => ({
+          ...prev,
+          user: nextUser ? { ...prev.user, ...nextUser } : prev.user,
+        }));
+      },
     }),
     [authState]
   );

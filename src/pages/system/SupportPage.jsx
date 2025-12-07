@@ -169,6 +169,21 @@ export default function SupportPage() {
         </div>
       </form>
 
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-base font-semibold text-slate-900">Mes tickets</h2>
+          <Link
+            to="/support/my-tickets"
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100"
+          >
+            Voir mes tickets
+          </Link>
+        </div>
+        <p className="text-sm text-slate-600">
+          Consultez l'état de vos demandes de support et les réponses de notre équipe.
+        </p>
+      </section>
+
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm text-sm leading-relaxed text-slate-600">
         <h2 className="text-base font-semibold text-slate-900">Ressources utiles</h2>
         <ul className="mt-3 list-disc space-y-1 pl-5">

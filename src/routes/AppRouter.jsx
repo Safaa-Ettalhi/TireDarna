@@ -29,6 +29,7 @@ import MaintenancePage from "../pages/system/MaintenancePage";
 import PrivacyPage from "../pages/system/PrivacyPage";
 import CookiesPage from "../pages/system/CookiesPage";
 import SupportPage from "../pages/system/SupportPage";
+import MyTicketsPage from "../pages/system/MyTicketsPage";
 import InboxPage from "../pages/inbox/InboxPage";
 import BanksManagementPage from "../pages/admin/BanksManagementPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
           { path: "properties/promotions", element: <PromotionsBadgesPage /> },
           { path: "inbox", element: <InboxPage /> },
           { path: "profile", element: <ProfilePage /> },
+          { path: "support/my-tickets", element: <MyTicketsPage /> },
           {
             path: "financing",
             element: <FinancingPage />,

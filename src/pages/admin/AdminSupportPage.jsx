@@ -210,52 +210,64 @@ export default function AdminSupportPage() {
     enabled: Boolean(token),
   });
 
-  
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) {
+      console.log("AdminSupportPage: Socket not available");
+      return;
+    }
+
+    console.log("AdminSupportPage: Socket available, connected:", socket.connected);
 
     const handleTicketCreated = (data) => {
-      console.log("Socket: ticket_created", data);
+      console.log(" Socket: ticket_created received", data);
+     
       queryClient.invalidateQueries({ queryKey: ["admin-support"] });
     };
 
     const handleTicketUpdated = (data) => {
-      console.log("Socket: ticket_updated", data);
-      if (!data?.ticket) return;
+      console.log(" Socket: ticket_updated received", data);
+      if (!data?.ticket) {
+        console.warn(" Socket: ticket_updated missing ticket data");
+        return;
+      }
 
       const updatedTicketId = data.ticket._id || data.ticket.id;
+      console.log(" Socket: Updating ticket", updatedTicketId);
 
-      queryClient.setQueryData(["admin-support", filters], (oldData) => {
-        if (!oldData?.tickets) return oldData;
-        return {
-          ...oldData,
-          tickets: oldData.tickets.map((t) => {
-            const ticketId = t._id || t.id;
-            return ticketId === updatedTicketId ? { ...t, ...data.ticket } : t;
-          }),
-        };
+     
+      setSelectedTicket((prev) => {
+        if (!prev) return prev;
+        const prevTicketId = prev._id || prev.id;
+        if (prevTicketId === updatedTicketId) {
+          console.log(" Socket: Updating selected ticket immediately");
+          return { ...prev, ...data.ticket };
+        }
+        return prev;
       });
 
-      if (selectedTicket) {
-        const selectedTicketId = selectedTicket._id || selectedTicket.id;
-        if (selectedTicketId === updatedTicketId) {
-          setSelectedTicket(data.ticket);
-        }
-      }
+      
+      queryClient.invalidateQueries({ queryKey: ["admin-support"] });
     };
 
     socket.on("ticket_created", handleTicketCreated);
     socket.on("ticket_updated", handleTicketUpdated);
 
+    console.log(" AdminSupportPage: Socket.IO listeners registered");
+
     return () => {
+      console.log(" AdminSupportPage: Cleaning up Socket.IO listeners");
       socket.off("ticket_created", handleTicketCreated);
       socket.off("ticket_updated", handleTicketUpdated);
     };
-  }, [socket, queryClient, selectedTicket, filters]);
+  }, [socket, queryClient]);
 
   const mutation = useMutation({
-    mutationFn: ({ id, payload }) => updateSupportTicket(token, id, payload),
+    mutationFn: ({ id, payload }) => {
+      console.log("Mutation: Updating ticket", id, "with payload", payload);
+      return updateSupportTicket(token, id, payload);
+    },
     onMutate: async ({ id, payload }) => {
+      console.log("Mutation onMutate: Starting optimistic update for ticket", id);
       await queryClient.cancelQueries({ queryKey: ["admin-support", filters] });
 
       const previousTickets = queryClient.getQueryData(["admin-support", filters]);
@@ -270,6 +282,7 @@ export default function AdminSupportPage() {
           }),
         };
       });
+
       if (selectedTicket) {
         const selectedTicketId = selectedTicket._id || selectedTicket.id;
         if (selectedTicketId === id) {
@@ -280,11 +293,13 @@ export default function AdminSupportPage() {
       return { previousTickets };
     },
     onError: (err, variables, context) => {
+      console.error("Mutation onError:", err);
       if (context?.previousTickets) {
         queryClient.setQueryData(["admin-support", filters], context.previousTickets);
       }
     },
     onSuccess: (data, variables) => {
+      console.log("Mutation onSuccess: Ticket updated successfully", data);
       if (data?.ticket) {
         const updatedTicketId = data.ticket._id || data.ticket.id;
         queryClient.setQueryData(["admin-support", filters], (old) => {
@@ -485,7 +500,16 @@ export default function AdminSupportPage() {
                       >
                         {ticket.assignedTo ? `Réassigner à ${ticket.assignedTo.firstName}` : "M'assigner"}
                       </Button>
-                      <Button variant="secondary" onClick={() => mutation.mutate({ id: ticket._id || ticket.id, payload: { status: "resolved" } })}>
+                      <Button 
+                        variant="secondary" 
+                        onClick={() => {
+                          console.log("Clore rapidement: Closing ticket", ticket._id || ticket.id);
+                          mutation.mutate({ 
+                            id: ticket._id || ticket.id, 
+                            payload: { status: "closed" } 
+                          });
+                        }}
+                      >
                         Clore rapidement
                       </Button>
                     </div>

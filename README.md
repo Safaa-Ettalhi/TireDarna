@@ -1,7 +1,7 @@
 # Daret / Darna - Plateforme Immobilière & Épargne Collective
 
 ## Contexte du projet
-Ce projet consiste à concevoir et livrer l’interface web d’une plateforme de publication et gestion d’annonces immobilières et d’épargne collective, appelée **Daret/Darna**, en s’adossant strictement à l’API existante. Le front-end doit être performant, accessible, responsive et intégrer le temps réel (chat et notifications).
+Ce projet consiste à concevoir et livrer l'interface web d'une plateforme de publication et gestion d'annonces immobilières et d'épargne collective, appelée **Daret/Darna**, en s'adossant strictement à l'API existante. Le front-end doit être performant, accessible, responsive et intégrer le temps réel (chat et notifications).
 
 ---
 
@@ -11,14 +11,14 @@ Ce projet consiste à concevoir et livrer l’interface web d’une plateforme d
 - Recherche multi-critères : mots-clés, localisation + rayon, prix, surface, pièces, équipements, type de transaction.
 - Affichage liste + carte (cluster, marqueurs, géolocalisation).
 - Détail annonce : médias, infos générales, caractéristiques, règles, diagnostics, disponibilité, contact vendeur.
-- Création/édition/suppression d’annonce via formulaires validés côté front.
+- Création/édition/suppression d'annonce via formulaires validés côté front.
 - Gestion des annonces : brouillon, publiées, rejetées, promotions.
 - Leads et intérêt : déclenchement lead, ouverture de thread chat.
 
 ### Comptes & abonnements
 - Authentification : email + mot de passe, SSO OAuth, vérification email, 2FA (si activé par API).
 - Profils : Visiteur, Particulier, Entreprise, Admin.
-- Abonnements : gratuit, pro, premium, avec effets visibles (priorité d’affichage, quotas, badges).
+- Abonnements : gratuit, pro, premium, avec effets visibles (priorité d'affichage, quotas, badges).
 
 ### Médias
 - Upload images/vidéos via URL présignée MinIO.
@@ -64,7 +64,7 @@ Ce projet consiste à concevoir et livrer l’interface web d’une plateforme d
 | Résultats de recherche + carte | `2.png` |
 | Détail annonce | `3.png` |
 | Auth : login, register, vérif email, 2FA, reset MDP, SSO callback | `4.png` |
-| Création / édition d’annonce (multi-étapes) | `5.png` |
+| Création / édition d'annonce (multi-étapes) | `5.png` |
 | Mes annonces | `6.png` |
 | Leads / Inbox + Chat thread | `7.png` |
 | Centre de notifications | `8.png` |
@@ -101,22 +101,23 @@ npm run dev
 # Build production
 npm run build
 npm run start
+```
 
 ### Admin :
 
-<img src="./pic/6.png" alt="Dashboard" width="800" />
-<img src="./pic/7.png" alt="Modération" width="800" />
-<img src="./pic/12.png" alt="Admin Stats" width="800" />
-<img src="./pic/1.png" alt="Accueil" width="800" />
-<img src="./pic/11.png" alt="Profil & Abonnement" width="800" />
-<img src="./pic/10.png" alt="Daret" width="800" />
-<img src="./pic/9.png" alt="Banque & Simulateur" width="800" />
-<img src="./pic/8.png" alt="Notifications" width="800" />
+<img src="pic/6.png" alt="Dashboard" style="max-width: 800px;" />
+<img src="pic/7.png" alt="Modération" style="max-width: 800px;" />
+<img src="pic/12.png" alt="Admin Stats" style="max-width: 800px;" />
+<img src="pic/1.png" alt="Accueil" style="max-width: 800px;" />
+<img src="pic/11.png" alt="Profil & Abonnement" style="max-width: 800px;" />
+<img src="pic/10.png" alt="Daret" style="max-width: 800px;" />
+<img src="pic/9.png" alt="Banque & Simulateur" style="max-width: 800px;" />
+<img src="pic/8.png" alt="Notifications" style="max-width: 800px;" />
 
 ### Particulier / Entreprise
 
-<img src="./pic/2.png" alt="Résultats de recherche" width="800" />
-<img src="./pic/4.png" alt="Authentification" width="800" />
-<img src="./pic/3.png" alt="Détail annonce" width="800" />
-<img src="./pic/5.png" alt="Création annonce" width="800" />
+<img src="pic/2.png" alt="Résultats de recherche" style="max-width: 800px;" />
+<img src="pic/4.png" alt="Authentification" style="max-width: 800px;" />
+<img src="pic/3.png" alt="Détail annonce" style="max-width: 800px;" />
+<img src="pic/5.png" alt="Création annonce" style="max-width: 800px;" />
 

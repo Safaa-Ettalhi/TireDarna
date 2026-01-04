@@ -103,19 +103,20 @@ npm run build
 npm run start
 
 ### Admin :
-![Dashboard](pic/6.png)
-![Modération](pic/7.png)
-![Admin Stats](pic/12.png)
-![Accueil](pic/1.png)
-![Profil & Abonnement](pic/11.png)
-![Daret](pic/10.png)
-![Banque & Simulateur](pic/9.png)
-![Notifications](pic/8.png)
+
+![Dashboard](./pic/6.png)
+![Modération](./pic/7.png)
+![Admin Stats](./pic/12.png)
+![Accueil](./pic/1.png)
+![Profil & Abonnement](./pic/11.png)
+![Daret](./pic/10.png)
+![Banque & Simulateur](./pic/9.png)
+![Notifications](./pic/8.png)
 
 ### Particulier / Entreprise
 
-![Résultats de recherche](pic/2.png)
-![Authentification](pic/4.png)
-![Détail annonce](pic/3.png)
-![Création annonce](pic/5.png)
+![Résultats de recherche](./pic/2.png)
+![Authentification](./pic/4.png)
+![Détail annonce](./pic/3.png)
+![Création annonce](./pic/5.png)
 

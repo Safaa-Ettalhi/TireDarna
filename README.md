@@ -103,7 +103,7 @@ npm run build
 npm run start
 
 ###admin :
-!(pic/6.png)
+![Dashbord](pic/6.png)
 !(pic/7.png)
 !(pic/12.png)
 !(pic/1.png)

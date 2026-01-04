@@ -104,19 +104,19 @@ npm run start
 
 ### Admin :
 
-![Dashboard](./pic/6.png)
-![Modération](./pic/7.png)
-![Admin Stats](./pic/12.png)
-![Accueil](./pic/1.png)
-![Profil & Abonnement](./pic/11.png)
-![Daret](./pic/10.png)
-![Banque & Simulateur](./pic/9.png)
-![Notifications](./pic/8.png)
+<img src="./pic/6.png" alt="Dashboard" width="800" />
+<img src="./pic/7.png" alt="Modération" width="800" />
+<img src="./pic/12.png" alt="Admin Stats" width="800" />
+<img src="./pic/1.png" alt="Accueil" width="800" />
+<img src="./pic/11.png" alt="Profil & Abonnement" width="800" />
+<img src="./pic/10.png" alt="Daret" width="800" />
+<img src="./pic/9.png" alt="Banque & Simulateur" width="800" />
+<img src="./pic/8.png" alt="Notifications" width="800" />
 
 ### Particulier / Entreprise
 
-![Résultats de recherche](./pic/2.png)
-![Authentification](./pic/4.png)
-![Détail annonce](./pic/3.png)
-![Création annonce](./pic/5.png)
+<img src="./pic/2.png" alt="Résultats de recherche" width="800" />
+<img src="./pic/4.png" alt="Authentification" width="800" />
+<img src="./pic/3.png" alt="Détail annonce" width="800" />
+<img src="./pic/5.png" alt="Création annonce" width="800" />
 

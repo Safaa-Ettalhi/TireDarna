@@ -102,20 +102,20 @@ npm run dev
 npm run build
 npm run start
 
-###admin :
-![Dashbord](pic/6.png)
-!(pic/7.png)
-!(pic/12.png)
-!(pic/1.png)
-!(pic/11.png)
-!(pic/10.png)
-!(pic/9.png)
-!(pic/8.png)
+### Admin :
+![Dashboard](pic/6.png)
+![Modération](pic/7.png)
+![Admin Stats](pic/12.png)
+![Accueil](pic/1.png)
+![Profil & Abonnement](pic/11.png)
+![Daret](pic/10.png)
+![Banque & Simulateur](pic/9.png)
+![Notifications](pic/8.png)
 
 ### Particulier / Entreprise
 
- !(pic/2.png)
- !(pic/4.png)
- !(pic/3.png)
- !(pic/5.png)
+![Résultats de recherche](pic/2.png)
+![Authentification](pic/4.png)
+![Détail annonce](pic/3.png)
+![Création annonce](pic/5.png)
 

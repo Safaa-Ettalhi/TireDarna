@@ -1,4 +1,4 @@
-# Daret / Darna - Plateforme Immobilière & Épargne Collective
+# Daret / Darna - Plateforme Immobilière & Épargne Collective (frontend )
 
 ## Contexte du projet
 Ce projet consiste à concevoir et livrer l'interface web d'une plateforme de publication et gestion d'annonces immobilières et d'épargne collective, appelée **Daret/Darna**, en s'adossant strictement à l'API existante. Le front-end doit être performant, accessible, responsive et intégrer le temps réel (chat et notifications).
@@ -89,8 +89,8 @@ Ce projet consiste à concevoir et livrer l'interface web d'une plateforme de pu
 
 ```bash
 # Cloner le dépôt
-git clone <repo-url>
-cd daretdarna-frontend
+git clone <https://github.com/Safaa-Ettalhi/TireDarna.git>
+cd TireDarna
 
 # Installer les dépendances
 npm install
@@ -101,6 +101,27 @@ npm run dev
 # Build production
 npm run build
 npm run start
+
+
+# Cloner Backend Darna
+git clone <https://github.com/Safaa-Ettalhi/Darna.git>
+cd Darna
+
+# Installer les dépendances
+npm install
+
+# Lancer en mode développement
+npm run dev
+
+# Cloner Backend Dart
+git clone <https://github.com/Safaa-Ettalhi/dart.git>
+cd dart
+
+# Installer les dépendances
+npm install
+
+# Lancer en mode développement
+npm run dev
 ```
 
 ### Admin :

@@ -89,7 +89,7 @@ Ce projet consiste à concevoir et livrer l'interface web d'une plateforme de pu
 
 ```bash
 # Cloner le dépôt
-git clone <https://github.com/Safaa-Ettalhi/TireDarna.git>
+git clone "https://github.com/Safaa-Ettalhi/TireDarna.git"
 cd TireDarna
 
 # Installer les dépendances
@@ -104,7 +104,7 @@ npm run start
 
 
 # Cloner Backend Darna
-git clone <https://github.com/Safaa-Ettalhi/Darna.git>
+git clone "https://github.com/Safaa-Ettalhi/Darna.git"
 cd Darna
 
 # Installer les dépendances
@@ -114,7 +114,7 @@ npm install
 npm run dev
 
 # Cloner Backend Dart
-git clone <https://github.com/Safaa-Ettalhi/dart.git>
+git clone "https://github.com/Safaa-Ettalhi/dart.git"
 cd dart
 
 # Installer les dépendances
